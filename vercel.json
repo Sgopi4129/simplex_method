@@ -1,10 +1,5 @@
 {
   "buildCommand": "pnpm --dir frontend build",
   "installCommand": "pnpm --dir frontend install --frozen-lockfile",
-  "framework": "nextjs",
-  "functions": {
-    "api/simplex.py": {
-      "runtime": "python3.12"
-    }
-  }
+  "framework": "nextjs"
 }
