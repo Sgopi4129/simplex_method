@@ -1,22 +1,6 @@
 # Simplex Studio
 
-## Deploy to Vercel
-
-1. Import the GitHub repository into Vercel.
-2. Leave the Vercel **Root Directory** empty (repository root), or set it to `frontend`.
-3. Deploy.
-
-The frontend is configured by `vercel.json` to build from the `frontend` directory. Local development can continue to use the Python virtual environment without setting `SIMPLEX_BACKEND_URL`.
-
-The `frontend/api/simplex.py` function is deployed by Vercel as `/api/simplex`, so no separate backend URL is required in production. For local development, start the API with:
-
-```text
-python backend/api_server.py
-```
-
-The frontend page continues to call `/api/simplex` in both environments.
-
-## Run with Docker
+## Deploy with Docker
 
 From the repository root:
 
@@ -25,6 +9,8 @@ docker compose up --build
 ```
 
 Open `http://localhost:3000`. The frontend container forwards calculations to the internal Python API container at `http://simplex-api:8000/solve`.
+
+This setup works on Docker-capable hosting platforms. Deploy `frontend/Dockerfile` as the website on port 3000 and `backend/Dockerfile` as the API on port 8000. Set `SIMPLEX_BACKEND_URL` on the frontend service to the API URL ending in `/solve`.
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -45,7 +31,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The frontend uses Next.js standalone output so its Docker image runs with `node server.js`.
 
 ## Learn More
 
@@ -56,8 +42,3 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
