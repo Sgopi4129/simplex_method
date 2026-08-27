@@ -56,7 +56,10 @@ class SimplexMethod:
 			boundary[variable] = -1.0
 			inequalities.append((boundary, 0.0))
 
-		candidates = [[0.0] * variable_count]
+		candidates = []
+		origin = [0.0] * variable_count
+		if self._is_feasible(origin, inequalities, equalities):
+			candidates.append(origin)
 		active_count = variable_count - len(equalities)
 		if active_count >= 0:
 			for active in combinations(inequalities, active_count):

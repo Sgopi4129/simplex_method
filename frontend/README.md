@@ -3,12 +3,12 @@
 ## Deploy to Vercel
 
 1. Import the GitHub repository into Vercel.
-2. Keep the project root at the repository root.
+2. Set the Vercel **Root Directory** to `frontend`.
 3. Deploy.
 
 The frontend is configured by `vercel.json` to build from the `frontend` directory. Local development can continue to use the Python virtual environment without setting `SIMPLEX_BACKEND_URL`.
 
-The repository-level `api/simplex.py` is deployed by Vercel as the `/api/simplex` Python function, so no separate backend URL is required in production. For local development, start the API with:
+The `frontend/api/simplex.py` function is deployed by Vercel as `/api/simplex`, so no separate backend URL is required in production. For local development, start the API with:
 
 ```text
 python backend/api_server.py
