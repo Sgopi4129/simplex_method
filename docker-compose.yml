@@ -1,0 +1,18 @@
+services:
+  simplex-api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    ports:
+      - "8000:8000"
+
+  simplex-web:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    environment:
+      SIMPLEX_BACKEND_URL: http://simplex-api:8000/solve
+    depends_on:
+      - simplex-api
+    ports:
+      - "3000:3000"

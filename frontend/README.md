@@ -15,6 +15,16 @@ python backend/api_server.py
 ```
 
 The frontend page continues to call `/api/simplex` in both environments.
+
+## Run with Docker
+
+From the repository root:
+
+```powershell
+docker compose up --build
+```
+
+Open `http://localhost:3000`. The frontend container forwards calculations to the internal Python API container at `http://simplex-api:8000/solve`.
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
