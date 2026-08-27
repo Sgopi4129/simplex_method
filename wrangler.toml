@@ -1,0 +1,9 @@
+name = "simplex-studio"
+compatibility_date = "2026-08-27"
+
+[build]
+command = "corepack pnpm@11.17.0 --dir frontend install --frozen-lockfile && corepack pnpm@11.17.0 --dir frontend build"
+
+[assets]
+directory = "./frontend/out"
+not_found_handling = "single-page-application"

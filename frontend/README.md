@@ -22,7 +22,7 @@ Build output directory: out
 Root directory: frontend
 ```
 
-Do not use `npx wrangler deploy`; that command is for Workers. Cloudflare Pages deploys the generated `out` directory. The Python Docker API is only needed for the Docker deployment.
+The repository includes `wrangler.toml`, so `npx wrangler deploy` builds `frontend/out` and deploys the static site. The Python Docker API is only needed for the Docker deployment.
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
