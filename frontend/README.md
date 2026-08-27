@@ -3,7 +3,7 @@
 ## Deploy to Vercel
 
 1. Import the GitHub repository into Vercel.
-2. Set the Vercel **Root Directory** to `frontend`.
+2. Leave the Vercel **Root Directory** empty (repository root), or set it to `frontend`.
 3. Deploy.
 
 The frontend is configured by `vercel.json` to build from the `frontend` directory. Local development can continue to use the Python virtual environment without setting `SIMPLEX_BACKEND_URL`.
