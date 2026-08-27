@@ -11,6 +11,18 @@ docker compose up --build
 Open `http://localhost:3000`. The frontend container forwards calculations to the internal Python API container at `http://simplex-api:8000/solve`.
 
 This setup works on Docker-capable hosting platforms. Deploy `frontend/Dockerfile` as the website on port 3000 and `backend/Dockerfile` as the API on port 8000. Set `SIMPLEX_BACKEND_URL` on the frontend service to the API URL ending in `/solve`.
+
+## Deploy to Cloudflare Pages
+
+The frontend also works as a static site because simplex calculations run in the browser. In Cloudflare Pages, use:
+
+```text
+Build command: corepack pnpm@11.17.0 build
+Build output directory: out
+Root directory: frontend
+```
+
+Do not use `npx wrangler deploy`; that command is for Workers. Cloudflare Pages deploys the generated `out` directory. The Python Docker API is only needed for the Docker deployment.
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
