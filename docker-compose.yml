@@ -3,16 +3,28 @@ services:
     build:
       context: .
       dockerfile: backend/Dockerfile
+    environment:
+      PORT: "8000"
+      CORS_ALLOWED_ORIGINS: "http://localhost:3000,http://127.0.0.1:3000"
     ports:
       - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health').read()"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   simplex-web:
     build:
-      context: frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "http://simplex-api:8000/solve"
     environment:
-      SIMPLEX_BACKEND_URL: http://simplex-api:8000/solve
+      PORT: "3000"
+      NEXT_PUBLIC_API_URL: "http://simplex-api:8000/solve"
     depends_on:
-      - simplex-api
+      simplex-api:
+        condition: service_started
     ports:
       - "3000:3000"

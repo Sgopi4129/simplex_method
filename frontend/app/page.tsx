@@ -8,6 +8,7 @@ type Relation = "<=" | ">=" | "=";
 const initialObjective: InputValue[] = [""];
 const initialConstraints: InputValue[][] = [[""]];
 const initialLimits: InputValue[] = [""];
+const backendUrl = process.env.NEXT_PUBLIC_API_URL || "";
 
 function formatNumber(value: number) {
   return Number.isInteger(value) ? String(value) : value.toFixed(4).replace(/0+$/, "").replace(/\.$/, "");
@@ -80,13 +81,43 @@ export default function Home() {
   const removeVariable = () => { if (objective.length > 1) { setObjective((current) => current.slice(0, -1)); setConstraints((current) => current.map((row) => row.slice(0, -1))); } };
   const addConstraint = () => { setConstraints((current) => [...current, objective.map(() => "")]); setLimits((current) => [...current, ""]); setRelations((current) => [...current, "<="]); };
   const removeConstraint = () => { if (constraints.length > 1) { setConstraints((current) => current.slice(0, -1)); setLimits((current) => current.slice(0, -1)); setRelations((current) => current.slice(0, -1)); } };
-  const calculate = () => {
+  const calculate = async () => {
     setLoading(true); setError(""); setResult(null);
     try {
       if (objective.some((value) => value === "") || constraints.some((row) => row.some((value) => value === "")) || limits.some((value) => value === "")) {
         throw new Error("Complete every coefficient and constraint limit before calculating.");
       }
-      setResult(solveModel(objective.map(Number), constraints.map((row) => row.map(Number)), limits.map(Number), relations, sense));
+
+      const payload = {
+        objective: objective.map(Number),
+        constraints: constraints.map((row) => row.map(Number)),
+        limits: limits.map(Number),
+        relations,
+        sense,
+      };
+
+      if (backendUrl) {
+        const response = await fetch(backendUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData?.error || "The backend was unable to solve this problem.");
+        }
+
+        const data = await response.json();
+        if (!Array.isArray(data.solution) || typeof data.maximum !== "number") {
+          throw new Error("The backend returned an invalid result.");
+        }
+
+        setResult({ solution: data.solution, maximum: data.maximum });
+        return;
+      }
+
+      setResult(solveModel(payload.objective, payload.constraints, payload.limits, payload.relations, payload.sense));
     } catch (requestError) { setError(requestError instanceof Error ? requestError.message : "Unable to solve this problem."); } finally { setLoading(false); }
   };
 

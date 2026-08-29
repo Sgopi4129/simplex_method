@@ -1,14 +1,16 @@
 FROM node:22-alpine AS dependencies
 WORKDIR /app
 RUN corepack enable
-COPY package.json pnpm-lock.yaml ./
+COPY frontend/package.json frontend/pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 FROM node:22-alpine AS builder
 WORKDIR /app
+ARG NEXT_PUBLIC_API_URL=http://simplex-api:8000/solve
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 RUN corepack enable
 COPY --from=dependencies /app/node_modules ./node_modules
-COPY . .
+COPY frontend ./
 RUN pnpm build
 
 FROM node:22-alpine AS runner
